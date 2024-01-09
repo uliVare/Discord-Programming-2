@@ -1,39 +1,65 @@
-function menu() {
-  let button = document.getElementById("button");
-  let menu = document.getElementById("converter");
+let userBalance = 2000;
+let converter = document.getElementById("button");
+const exchangeRates = {
+  CLP: 0.88,
+  ARS: 1,
+  USD: 814,
+  EUR: 889,
+  TRY: 27,
+  GBP: 1033,
+};
 
-  button.style.display = "none";
-  menu.style.display = "block";
+converter.addEventListener("click", function (e) {
+  e.preventDefault();
+  alert("Accediendo");
+  showMenu();
+});
+
+function showMenu() {
+  document.getElementById("button").style.display = "none";
+  document.getElementById("converter").style.display = "block";
 }
 
 function convert() {
+  const amount = parseFloat(document.getElementById("amount").value);
   let initialCurrency = document.getElementById("initialCurrency").value;
   let targetCurrency = document.getElementById("targetCurrency").value;
-  let amount = parseFloat(document.getElementById("amount").value);
-  let withdrawFunds = document.getElementById("withdrawFunds").checked;
+  let resultElement = document.getElementById("result");
 
-  if (isNaN(amount) || amount <= 0) {
-    alert("Please enter a valid amount.");
+  if (isNaN(amount)) {
+    resultElement.innerHTML = "Ingrese un monto valido.";
     return;
   }
 
-  if (withdrawFunds) {
-    amount -= amount * 0.01;
+  if (!exchangeRates[initialCurrency] || !exchangeRates[targetCurrency]) {
+    resultElement.innerHTML = "Las monedas seleccionadas no son validas.";
+    return;
   }
 
-  let exchangeRate = 812;
-  let result = amount * exchangeRate;
+  let result =
+    (amount * exchangeRates[initialCurrency]) / exchangeRates[targetCurrency];
+  resultElement.innerHTML = `${amount} ${initialCurrency} es igual a ${result.toFixed(
+    2
+  )} ${targetCurrency}.`;
 
-  alert(
-    `Converted ${amount} ${initialCurrency} a ${result.toFixed(
-      2
-    )} ${targetCurrency}`
-  );
+  setTimeout(() => {
+    const withdrawOption = confirm("Desea retirar sus fondos?");
+    if (withdrawOption) {
+      withdrawFunds(result);
+    } else {
+      resultElement.innerHTML +=
+        "<br>No se han retirado fondos. Volviendo al menu principal";
+      location.reload();
+    }
+  }, 500);
+}
 
-  let performAnotherOperation = confirm(
-    "Do you wish to perform another operation?"
-  );
-  if (performAnotherOperation) {
-    location.reload();
-  }
+function withdrawFunds(withdrawalAmount) {
+  const resultElement = document.getElementById("result");
+  const commission = withdrawalAmount * 0.01;
+  withdrawalAmount -= commission;
+  userBalance -= withdrawalAmount;
+  resultElement.innerHTML = `Se han retirado fondos por un monto de ${withdrawalAmount.toFixed(
+    2
+  )} (1% de comisión).`;
 }

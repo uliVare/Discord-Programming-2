@@ -1,7 +1,11 @@
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
   margin: 50px;
 }
 
@@ -12,6 +16,7 @@ body {
 }
 
 #converter {
+  text-align: center;
   display: none;
 }
 

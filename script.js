@@ -11,7 +11,7 @@ const exchangeRates = {
 
 converter.addEventListener("click", function (e) {
   e.preventDefault();
-  alert("Accediendo");
+  alert("Ingreso a Currency Converter");
   showMenu();
 });
 
@@ -47,11 +47,10 @@ function convert() {
     if (withdrawOption) {
       withdrawFunds(result);
     } else {
-      resultElement.innerHTML +=
-        "<br>No se han retirado fondos. Volviendo al menu principal";
+      alert("No se han retirado fondos, regresará al menú principal");
       location.reload();
     }
-  }, 500);
+  }, 700);
 }
 
 function withdrawFunds(withdrawalAmount) {
